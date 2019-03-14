@@ -50,7 +50,18 @@ RUN sed -i -e 's/ServerSignature On/ServerSignature Off/g' \
     echo "LoadModule security2_module /usr/lib/apache2/modules/mod_security2.so" > /etc/apache2/mods-available/modsecurity.load && \
     echo 'ServerName localhost' >>  /etc/apache2/conf-enabled/security.conf && \
     echo "hello world" > /var/www/html/index.html && \
-    a2enmod unique_id modsecurity
+    a2enmod unique_id modsecurity && \
+    apt update && \
+    apt install -y git nano curl ca-certificates && \
+    apt-get install libapache2-mod-security2 && \
+    mv /etc/modsecurity/modsecurity.conf-recommended  modsecurity.conf && \
+    apt-cache show libapache2-mod-security2 && \
+    cd ~ && \ 
+    git clone https://github.com/SpiderLabs/owasp-modsecurity-crs.git && \
+    cd owasp-modsecurity-crs && \
+    mv crs-setup.conf.example /etc/modsecurity/crs-setup.conf && \
+    mv rules/ /etc/modsecurity/
+
 
 EXPOSE 80
 
